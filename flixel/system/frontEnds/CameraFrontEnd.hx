@@ -365,7 +365,7 @@ class CameraFrontEnd
 
 	function get_bgColor():FlxColor
 	{
-		return (FlxG.camera == null) ? FlxColor.BLACK : FlxG.camera.bgColor;
+		return (FlxG.camera == null) ? FlxColor.TRANSPARENT : FlxG.camera.bgColor;
 	}
 
 	function set_bgColor(Color:FlxColor):FlxColor
