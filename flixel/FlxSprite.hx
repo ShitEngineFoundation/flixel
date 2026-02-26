@@ -966,10 +966,7 @@ class FlxSprite extends FlxObject
 			if (!camera.visible || !camera.exists || !isOnScreen(camera))
 				continue;
 			
-			if (isSimpleRender(camera))
-				drawSimple(camera);
-			else
-				drawComplex(camera);
+			drawTo(camera);
 			
 			#if FLX_DEBUG
 			FlxBasic.visibleCount++;
@@ -980,6 +977,13 @@ class FlxSprite extends FlxObject
 		if (FlxG.debugger.drawDebug)
 			drawDebug();
 		#end
+	}
+	public function drawTo(camera:FlxCamera)
+	{
+		if (isSimpleRender(camera))
+			drawSimple(camera);
+		else
+			drawComplex(camera);
 	}
 	
 	/**
