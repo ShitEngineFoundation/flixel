@@ -7,6 +7,7 @@ import flixel.math.FlxMatrix;
 import flixel.system.FlxAssets.FlxShader;
 import openfl.Vector;
 import openfl.display.ShaderParameter;
+import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
 
 class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
@@ -14,6 +15,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	static inline var VERTICES_PER_QUAD = 4;
 
 	public var shader:FlxShader;
+	public var overrideSprite:Sprite;
 
 	var rects:Vector<Float>;
 	var transforms:Vector<Float>;
@@ -133,10 +135,13 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
 
-		camera.canvas.graphics.overrideBlendMode(blend);
-		camera.canvas.graphics.beginShaderFill(shader);
-		camera.canvas.graphics.drawQuads(rects, null, transforms);
-		camera.canvas.graphics.endFill();
+		var target = camera.canvas;
+		if(overrideSprite != null)
+			target = overrideSprite;
+		target.graphics.overrideBlendMode(blend);
+		target.graphics.beginShaderFill(shader);
+		target.graphics.drawQuads(rects, null, transforms);
+		target.graphics.endFill();
 		super.render(camera);
 	}
 

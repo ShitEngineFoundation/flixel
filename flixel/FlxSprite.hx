@@ -1,5 +1,6 @@
 package flixel;
 
+import openfl.display.Sprite;
 import flixel.FlxBasic.IFlxBasic;
 import flixel.animation.FlxAnimationController;
 import flixel.graphics.FlxGraphic;
@@ -978,6 +979,7 @@ class FlxSprite extends FlxObject
 			drawDebug();
 		#end
 	}
+	public var customRenderTarget:Sprite;
 	public function drawTo(camera:FlxCamera)
 	{
 		if (isSimpleRender(camera))
@@ -1029,7 +1031,7 @@ class FlxSprite extends FlxObject
 		final matrix = drawComplexMatrix; // TODO: Just use local?
 		prepareComplexMatrix(matrix, frame, camera);
 		
-		camera.drawPixels(frame, framePixels, matrix, colorTransform, blend, antialiasing, shader);
+		camera.drawPixelsEx(frame, framePixels, matrix, colorTransform, blend, antialiasing, shader, customRenderTarget);
 	}
 	
 	function prepareComplexMatrix(matrix:FlxMatrix, frame:FlxFrame, camera:FlxCamera)

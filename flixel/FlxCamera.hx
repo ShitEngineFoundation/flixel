@@ -772,6 +772,39 @@ class FlxCamera extends FlxBasic
 		}
 	}
 
+	public function drawPixelsEx(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false,
+			?shader:FlxShader,?customLayer:Sprite):Void
+	{
+		if (FlxG.renderBlit)
+		{
+			_helperMatrix.copyFrom(matrix);
+
+			if (_useBlitMatrix)
+			{
+				_helperMatrix.concat(_blitMatrix);
+				buffer.draw(pixels, _helperMatrix, null, null, null, (smoothing || antialiasing));
+			}
+			else
+			{
+				_helperMatrix.translate(-viewMarginLeft, -viewMarginTop);
+				buffer.draw(pixels, _helperMatrix, null, blend, null, (smoothing || antialiasing));
+			}
+		}
+		else
+		{
+			var isColored = (transform != null #if !html5 && transform.hasRGBMultipliers() #end);
+			var hasColorOffsets:Bool = (transform != null && transform.hasRGBAOffsets());
+
+			#if FLX_RENDER_TRIANGLE
+			final drawItem:FlxDrawTrianglesItem = startTrianglesBatch(frame.parent, smoothing, isColored, blend, hasColorOffsets, shader);
+			#else
+			final drawItem:FlxDrawQuadsItem = startQuadBatch(frame.parent, isColored, hasColorOffsets, blend, smoothing, shader);
+			#end
+			drawItem.overrideSprite = customLayer;
+			drawItem.addQuad(frame, matrix, transform);
+		}
+	}
+
 	public function copyPixels(?frame:FlxFrame, ?pixels:BitmapData, ?sourceRect:Rectangle, destPoint:Point, ?transform:ColorTransform, ?blend:BlendMode,
 			?smoothing:Bool = false, ?shader:FlxShader):Void
 	{
